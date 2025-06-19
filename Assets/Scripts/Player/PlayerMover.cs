@@ -1,26 +1,23 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerMover : MonoBehaviour
 {
-    private Rigidbody _rigidbody;
-    
-    [Header("Movement Parameters")]
-    [field: SerializeField] public float MoveSpeed { get; private set; }
-    [SerializeField] private float _turnSpeed;
-    
+    [SerializeField] private float moveSpeed = 5f;
+    private Rigidbody rb;
+
     private void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
     }
 
-    public void Move(Vector2 direction)
+    public void Move(Vector2 input)
     {
-        float moveX = direction.x;
-        float moveZ = direction.y;
-
-        transform.Rotate(Vector3.up, moveX * _turnSpeed * Time.deltaTime, Space.World);
-        
-        _rigidbody.linearVelocity = transform.forward * (moveZ * MoveSpeed);
+        // X = sağ/sol, Z = ileri/geri → Unity 3D yönlendirmesi
+        Vector3 move = new Vector3(input.x, 0f, input.y);
+        rb.linearVelocity = move * moveSpeed;
     }
+
+    // Diğer scriptler (örneğin PlayerAnimator) buradan erişebilir
+    public float MoveSpeed => moveSpeed;
 }
+

@@ -9,7 +9,7 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private Transform _mesh;
 
     private float _moveSpeed;
-    
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -25,7 +25,12 @@ public class PlayerAnimator : MonoBehaviour
     {
         Vector3 velocity = _rigidbody.linearVelocity;
         float forwardVelocity = Vector3.Dot(velocity, transform.forward);
-        if (forwardVelocity != 0)
-            _mesh.localRotation *= Quaternion.Euler(Mathf.Deg2Rad * (360 / forwardVelocity), 0, 0);
+
+        // D�nme miktar�n� h�zla do�ru orant�l� yap
+        if (Mathf.Abs(forwardVelocity) > 0.01f)
+        {
+            float rotationSpeed = forwardVelocity * 50f; // 10 ile �arparsan daha fazla d�ner
+            _mesh.localRotation *= Quaternion.Euler(rotationSpeed * Time.deltaTime, 0, 0);
+        }
     }
 }
